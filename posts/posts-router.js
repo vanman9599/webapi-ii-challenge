@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 })
 
 
-//TODO: FIX
+
 router.post('/', async (req, res) => {
     const info = req.body;
     // if(!info.title || !info.contents){
