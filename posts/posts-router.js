@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 
 
 //TODO: FIX
-router.post('/posts', async (req, res) => {
+router.post('/', async (req, res) => {
     const info = req.body;
     // if(!info.title || !info.contents){
     //     res.status(400).json({
@@ -35,6 +35,20 @@ router.post('/posts', async (req, res) => {
     }
 })
  
+//FIX
+router.post('/:id/comments', async (req, res) => {
+    const info = req.body;
+    
+    try{
+        const comment = await Posts.insertComment(info);
+        res.status(201).json(comment);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            message: 'There was an error while saving the comment to the database'
+        })
+    }
+})
 //Get by ID
 router.get('/:id', async (req, res) => {
     try{
@@ -47,6 +61,23 @@ router.get('/:id', async (req, res) => {
     } catch(error){
         res.status(500).json({
             error: "The post information could be not retrieved"
+        })
+    }
+})
+//
+router.get('/:id/comments', async (req, res) => {
+    try{
+        const comments = await Posts.findCommentsById(req.params.id);
+        if(comments){
+            res.status(200).json(comments);
+        } else{
+            res.status(404).json({
+                message: "The post with the specified ID doesnt exist"
+            })
+        } 
+    }catch(error){
+        res.status(500).json({
+            error: "The post information could not be retrieved"
         })
     }
 })
