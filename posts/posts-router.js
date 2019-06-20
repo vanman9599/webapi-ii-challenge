@@ -18,12 +18,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const info = req.body;
-    // if(!info.title || !info.contents){
-    //     res.status(400).json({
-    //         errorMessage: "Please provide title and contents for the post."
-    //     })
-    //     res.end();
-    // }
+    if(!info.title || !info.contents){
+        res.status(400).json({
+            errorMessage: "Please provide title and contents for the post."
+        })
+        res.end();
+    }
     try{
         const post = await Posts.insert(info);
         res.status(201).json(post);
@@ -35,8 +35,8 @@ router.post('/', async (req, res) => {
     }
 })
  
-//FIX
-router.post('/:id/comments', async (req, res) => {
+
+router.post('/comments', async (req, res) => {
     const info = req.body;
     
     try{
@@ -45,6 +45,7 @@ router.post('/:id/comments', async (req, res) => {
     }catch(error){
         console.log(error);
         res.status(500).json({
+            error: error.message,
             message: 'There was an error while saving the comment to the database'
         })
     }
